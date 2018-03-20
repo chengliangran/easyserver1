@@ -9,10 +9,10 @@ public class WebAppContext {
 
     String contextPath;//路径地址
 
-    File webApp;//webapp 的地址
+    File webAppFile;//webapp 的地址
 
     String[] _dftConfigurationClasses={
-
+        "com.clr.context.DefaultConfiguration",
     };//webapp配置器
 
     String[] configurationClasses;
@@ -30,16 +30,16 @@ public class WebAppContext {
     }
 
     public File getWebApp() {
-        return webApp;
+        return webAppFile;
     }
 
-    public void setWebApp(String webAppPath) {
-        webApp=new File(System.getProperty("user.dir")+File.separator+webAppPath);
+    public void setWebAppFile(String webAppPath) {
+        webAppFile=new File(System.getProperty("user.dir")+File.separator+webAppPath);
     }
 
     public static void main(String[] args) {
-        WebAppContext context=new WebAppContext();
-        context.setWebApp("src/main/webapp");
-        System.out.println(context.getWebApp().isDirectory());
+        System.out.println(new File(System.getProperty("user.dir")+"/../../../../../..").exists());
+
+
     }
 }
