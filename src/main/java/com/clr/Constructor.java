@@ -7,6 +7,10 @@ import com.clr.server.Server;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by Administrator on 2018/3/20 0020.
@@ -41,12 +45,34 @@ public class Constructor {
             return true;
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
+                return false;
         }
     }
 
     public static void main(String[] args) {
-
+        Matcher matcher=Pattern.compile("123").matcher("123123");
+        System.out.println(matcher.find());
+        System.out.println(matcher.group(0));
+        System.out.println(matcher.find());
+        System.out.println(matcher.group(0));
+        System.out.println(matcher.find());
+        System.out.println();
     }
 
+
+}
+class addInteger implements Runnable{
+
+    private static Object lock=new Object();
+
+    public static AtomicInteger count=new AtomicInteger(0);
+
+    public void run() {
+        int i=0;
+        while (i<10000){
+            count.getAndAdd(1);
+            System.out.println(count);
+            i++;
+        }
+    }
 }

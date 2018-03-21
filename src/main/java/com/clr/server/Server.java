@@ -2,6 +2,10 @@ package com.clr.server;
 
 import com.clr.connector.NioConnector;
 import com.clr.context.WebAppContext;
+import sun.management.ConnectorAddressLink;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2018/3/20 0020.
@@ -9,10 +13,12 @@ import com.clr.context.WebAppContext;
 public class Server {
 
     //连接器
-    NioConnector nioConnector=new NioConnector();
+    List<NioConnector> connectors=new ArrayList<NioConnector>();
 
     //线程池
     ThreadPool threadPool=null;
+
+    //connector
 
     //上下文
     WebAppContext context=new WebAppContext();
@@ -31,19 +37,15 @@ public class Server {
     }
 
     //getter and setter
-    public NioConnector getNioConnector() {
-        return nioConnector;
-    }
-
-    public void setNioConnector(NioConnector nioConnector) {
-        this.nioConnector = nioConnector;
-    }
-
     public WebAppContext getContext() {
         return context;
     }
 
     public void setContext(WebAppContext context) {
         this.context = context;
+    }
+
+    public void setNioConnector(NioConnector connector) {
+        connectors.add(connector);
     }
 }

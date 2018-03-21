@@ -1,6 +1,10 @@
 package com.clr.context;
 
+import com.sun.xml.internal.ws.api.wsdl.parser.MetaDataResolver;
+import com.sun.xml.internal.ws.org.objectweb.asm.FieldVisitor;
+
 import java.io.File;
+import java.util.ArrayList;
 
 /**
  * Created by Administrator on 2018/3/20 0020.
@@ -9,15 +13,49 @@ public class WebAppContext {
 
     String contextPath;//路径地址
 
+    MetaData _metadata=new MetaData();
+
+    ClassLoader loader=Thread.currentThread().getContextClassLoader();
+
     File webAppFile;//webapp 的地址
 
+    File webInfFile;//webinf 的地址
+
+    File tempFile;//临时文件的 的地址 下面的是判断是否存在
+    boolean tempFileConfigured;
+
+    String _preUnpackBaseResourcePath;//这是war包的地址
+
     String[] _dftConfigurationClasses={
-        "com.clr.context.DefaultConfiguration",
+        "com.clr.context.configurations.DefaultConfiguration",
     };//webapp配置器
 
-    String[] configurationClasses;
+    String[] configurationClasses;//配置器的类名
 
-    Configuration[] configurations;
+    Configuration[] configurations;//配置器
+
+    public void doStart(){
+        loadConfiguration();
+
+    }
+
+    private void loadConfiguration() {
+        try {
+            if (configurations==null){
+                configurationClasses=_dftConfigurationClasses;
+                configurations=new Configuration[configurationClasses.length];
+                for (int i=0;i<configurations.length;i++) {
+                    configurations[i]=(Configuration) loader.loadClass(configurationClasses[i]).newInstance();
+                }
+            }
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     //getter and setter
@@ -39,7 +77,5 @@ public class WebAppContext {
 
     public static void main(String[] args) {
         System.out.println(new File(System.getProperty("user.dir")+"/../../../../../..").exists());
-
-
-    }
+   }
 }
