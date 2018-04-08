@@ -2,6 +2,7 @@ package com.clr.server;
 
 import com.clr.connector.NioConnector;
 import com.clr.context.WebAppContext;
+import com.clr.lifecycle.Lifecycle;
 import sun.management.ConnectorAddressLink;
 
 import java.util.ArrayList;
@@ -10,21 +11,22 @@ import java.util.List;
 /**
  * Created by Administrator on 2018/3/20 0020.
  */
-public class Server {
+public class Server implements Lifecycle{
 
-    //连接器
     List<NioConnector> connectors=new ArrayList<NioConnector>();
 
-    //线程池
     ThreadPool threadPool=null;
 
-    //connector
-
-    //上下文
     WebAppContext context=new WebAppContext();
 
+    public void start() {
+        context.start();
+    }
 
-    //启动
+    public void stop() {
+
+    }
+
     public void doStart(){
         setThreadPool(new ThreadPool());
     }
@@ -46,6 +48,10 @@ public class Server {
     }
 
     public void setNioConnector(NioConnector connector) {
+        connectors.add(connector);
+    }
+
+    public void addConnector(NioConnector connector){
         connectors.add(connector);
     }
 }

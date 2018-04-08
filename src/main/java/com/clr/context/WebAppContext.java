@@ -1,5 +1,7 @@
 package com.clr.context;
 
+import com.clr.lifecycle.Lifecycle;
+import com.sun.xml.internal.ws.api.model.ParameterBinding;
 import com.sun.xml.internal.ws.api.wsdl.parser.MetaDataResolver;
 import com.sun.xml.internal.ws.org.objectweb.asm.FieldVisitor;
 
@@ -9,7 +11,7 @@ import java.util.ArrayList;
 /**
  * Created by Administrator on 2018/3/20 0020.
  */
-public class WebAppContext {
+public class WebAppContext implements Lifecycle {
 
     String contextPath;//路径地址
 
@@ -33,6 +35,11 @@ public class WebAppContext {
     String[] configurationClasses;//配置器的类名
 
     Configuration[] configurations;//配置器
+    private boolean _available;
+    private ClassLoader _loader;
+    private Object _context=new Object();
+    private Object __context;
+    private LtManager _ltManager;
 
     public void doStart(){
         loadConfiguration();
@@ -57,6 +64,19 @@ public class WebAppContext {
         }
     }
 
+    public void start() {
+        _loader=new WebAppClassLoader(Thread.currentThread().getContextClassLoader());
+        Thread.currentThread().setContextClassLoader(_loader);
+
+        __context=_context;
+
+        _ltManager.resolve();
+        System.out.println("启动context");
+    }
+
+    public void stop() {
+
+    }
 
     //getter and setter
     public String getContextPath() {
@@ -78,4 +98,6 @@ public class WebAppContext {
     public static void main(String[] args) {
         System.out.println(new File(System.getProperty("user.dir")+"/../../../../../..").exists());
    }
+
+
 }
