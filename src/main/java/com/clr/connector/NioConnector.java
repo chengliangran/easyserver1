@@ -36,11 +36,8 @@ public class NioConnector implements Lifecycle {
     //2
     ThreadPool threadPool=new ThreadPool();
 
-    //初始化连接器
-    public void start() {
+    public void start() {//
         open();//设置serversockchannel
-
-        threadPool=new ThreadPool();//设置threadpool
 
         selectManager.doStart();
 
@@ -51,30 +48,26 @@ public class NioConnector implements Lifecycle {
 
     }
 
-    //设置serversocketchannel非阻塞生成socket
-    private void open() {
+     private void open() {
         try {
             serverSocketChannel=ServerSocketChannel.open();
 
             serverSocketChannel.configureBlocking(true);
 
-            if (get_port()>0){
-                serverSocketChannel.socket().bind(new InetSocketAddress(get_port()));
-            }
+            serverSocketChannel.socket().bind(new InetSocketAddress(9090));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    public void accept(){
+    public void accept(){//多线程调用
         try {
             SocketChannel channel= serverSocketChannel.accept();
             
             channel.configureBlocking(false);
             
             Socket socket= channel.socket();
-            configure(socket);
-            
+
             selectManager.register(channel);
 
         } catch (IOException e) {
@@ -84,6 +77,10 @@ public class NioConnector implements Lifecycle {
 
     private void configure(Socket socket) {
         System.out.println("配置socket内容");
+    }
+
+    public static void main(String[] args) {
+        new NioConnector().start();
     }
 
     //getter and setter
@@ -102,7 +99,7 @@ public class NioConnector implements Lifecycle {
         }
     }
 
-    class Acceptor implements Runnable{
+    class Acceptor implements Runnable{//多线程开关
 
         public void run() {
             while (true){
