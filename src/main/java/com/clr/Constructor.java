@@ -62,23 +62,23 @@ public class Constructor implements Lifecycle {
 
     }
    public void start() {
-        Server server=new Server();
-
-        NioConnector connector= new NioConnector();
-        if(testPort(port)){
-            connector.set_port(port);
-        }else{
-            System.out.println("警告:端口被占用");
-        }
-
-        WebAppContext context=new WebAppContext();
-        context.setContextPath(contextPath);
-        context.setWebAppFile(webAppDir);
-
-        //组装server
-        server.setContext(context);
-        server.setNioConnector(connector);
-        server.start();
+//        Server server=new Server();
+//
+//        NioConnector connector= new NioConnector();
+//        if(testPort(port)){
+//            connector.set_port(port);
+//        }else{
+//            System.out.println("警告:端口被占用");
+//        }
+//
+//        WebAppContext context=new WebAppContext();
+//        context.setContextPath(contextPath);
+//        context.setWebAppFile(webAppDir);
+//
+//        //组装server
+//        server.setContext(context);
+//        server.setNioConnector(connector);
+//        server.start();
     }
 
     public void stop() {

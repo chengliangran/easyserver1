@@ -1,46 +1,46 @@
 package com.clr;
 
 import com.clr.utils.PathKit;
+import com.sun.corba.se.impl.ior.NewObjectKeyTemplateBase;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.Element;
+import org.dom4j.io.SAXReader;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.RandomAccessFile;
+import java.io.*;
 import java.net.InetSocketAddress;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2018/3/27 0027.
  */
 public class Test {
     public static void main(String[] args) {
-        List<SocketChannel> channels=new ArrayList<SocketChannel>();
+        URLClassLoader classLoader= (URLClassLoader) Thread.currentThread().getContextClassLoader();
+        URL[] urls= classLoader.getURLs();
+        InputStream stream=classLoader.getResourceAsStream("web.xml");
+        byte[] buffer=new byte[2048];
+        Document document;
         try {
-            ServerSocketChannel serverSocketChannel=ServerSocketChannel.open();
-            serverSocketChannel.socket().bind(new InetSocketAddress(9090));
-            int i=0;
-            while (i<10){
-                System.out.println("cehsi  "+i);
-               SocketChannel channel= serverSocketChannel.accept();
-                channels.add(channel);
-                i++;
-            }
-            channels.size();
-            Selector sel=Selector.open();
-            for (SocketChannel channel : channels) {
-                channel.configureBlocking(false);
-                channel.register(sel, SelectionKey.OP_READ);
-            }
-            System.out.println(sel.selectNow()+"finalset");
-
-        } catch (Exception e) {
+               document=new SAXReader().read(stream);
+               Element element= document.getRootElement();
+               Iterator<Element> iterator= element.elementIterator();
+                while (iterator.hasNext()){
+                    System.out.println(iterator.next().getName());
+                }
+        } catch (DocumentException e) {
             e.printStackTrace();
         }
+
     }
 }

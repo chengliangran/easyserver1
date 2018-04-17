@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <node1>
+        <subnode1></subnode1>
+    </node1>
+    <node2>
+        <subnode2></subnode2>
+    </node2>
+    <node3>
+        <subnode3></subnode3>
+    </node3>
+</root>
