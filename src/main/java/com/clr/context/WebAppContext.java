@@ -1,14 +1,14 @@
 package com.clr.context;
 
 import com.clr.configuration.ContextConfiguration;
+import com.clr.context.handler.SecurityHandler;
+import com.clr.context.handler.ServletHandler;
+import com.clr.context.handler.SessionHandler;
 import com.clr.lifecycle.Lifecycle;
 import com.clr.utils.PathKit;
-import com.sun.xml.internal.ws.api.model.ParameterBinding;
-import com.sun.xml.internal.ws.api.wsdl.parser.MetaDataResolver;
-import com.sun.xml.internal.ws.org.objectweb.asm.FieldVisitor;
 
-import java.io.File;
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2018/3/20 0020.
@@ -19,34 +19,35 @@ public class WebAppContext implements Lifecycle {
 
     String _webAppDir;
 
-    //配置类暂时先锁死
+    //配置类
     ContextConfiguration contextConfiguration=new ContextConfiguration();
 
-    //classloader 默认暂时先使用默认的thread提供的lorder
+    //加载器
     ClassLoader classLoader=Thread.currentThread().getContextClassLoader();
 
-    //默认的解释器
-    private String defaultXml="defaultWeb.xml";
-
-    //自定义的解释文档
+    //配置文档
     private String webXml="web.xml";
 
-    //context装配类metadata负责初始化metadata
-    private MetaData metadata;
+    //配置器
+    private MetaData metadata=new MetaData();
+
+    //本地编码信息
+    private Map<String,String> localEncodingMap=new HashMap<>();
+
+    //欢迎网页
+    private String[] welcomeFiles;
+
+    private SessionHandler sessionHandler =new SessionHandler();
+
+    private SecurityHandler securityHandler =new SecurityHandler();
+
+    private ServletHandler servletHandler =new ServletHandler();
 
     //interface  --lifecycle
     public void start() {
-        //前配置
-        contextConfiguration.setContext(this);
-        contextConfiguration.preConfigure();
-        //配置
-        contextConfiguration.configure();
+        contextConfiguration.configure(this);
         metadata.resolve(this);
 
-
-
-        //后配置
-        contextConfiguration.postConfigure();
     }
 
     public void stop() {
@@ -78,19 +79,6 @@ public class WebAppContext implements Lifecycle {
         this.classLoader = classLoader;
     }
 
-    public static void main(String[] args) {
-        WebAppContext context=new WebAppContext();
-        context.setContextPath("/");
-        context.setWebAppDir(PathKit.webContent);
-        context.start();
-        System.out.println(PathKit.webContent);
-    }
-
-    public String getDefaultXml() {
-        return defaultXml;
-    }
-
-
     public String getWebXml() {
         return webXml;
     }
@@ -101,5 +89,47 @@ public class WebAppContext implements Lifecycle {
 
     public void setMetadata(MetaData metadata) {
         this.metadata = metadata;
+    }
+
+    public SessionHandler getSessionHandler() {
+        return sessionHandler;
+    }
+
+    public SecurityHandler getSecurityHandler() {
+        return securityHandler;
+    }
+
+    public ServletHandler getServletHandler() {
+        return servletHandler;
+    }
+
+    public String[] getWelcomeFiles() {
+        return welcomeFiles;
+    }
+
+    public void addWelcomeFile(String welcomeFile) {
+        String[] oldWelcomeFiles=new String[welcomeFile.length()+1];
+        oldWelcomeFiles[welcomeFile.length()]=welcomeFile;
+        for (int i = 0; i < oldWelcomeFiles.length-1; i++) {
+            oldWelcomeFiles[i]=welcomeFiles[i];
+        }
+        welcomeFiles=oldWelcomeFiles;
+    }
+
+    public Map<String, String> getLocalEncodingMap() {
+        return localEncodingMap;
+    }
+
+    public void addLocalEncodingMap(String locale,String encoding) {
+        localEncodingMap.put(locale,encoding);
+    }
+
+    //main
+    public static void main(String[] args) {
+        WebAppContext context=new WebAppContext();
+        context.setContextPath("/");
+        context.setWebAppDir(PathKit.webContent);
+        context.start();
+        System.out.println(PathKit.webContent);
     }
 }

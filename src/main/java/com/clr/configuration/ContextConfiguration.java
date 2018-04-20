@@ -26,14 +26,13 @@ public class ContextConfiguration {
                 System.out.println(url);
             }
             //拿到默认的xml描述文件和 自定义的xml描述文件
-            String webDefaultXml=context.getDefaultXml();
-            String webXml=context.getWebXml();
+             String webXml=context.getWebXml();
             //搜索webinfjars 和metainf的信息
             //找到web-fragment的xml 相当于子jar包的xml
         }
     };
 
-    public void configure() {
+    public void configure(WebAppContext context) {
         //取出webinf里面的 classes和lib 里面的图纸将其塞入classloader之中
     }
 

@@ -12,8 +12,6 @@ public class MetaData {
 
     DescriptorProcessor processor=new StandardDescriptorProcessor();
 
-
-
     public void resolve(WebAppContext webAppContext) {
         String defaultXml=  webAppContext.getDefaultXml();
         Descriptor defXmlDescriptor=new Descriptor(defaultXml);

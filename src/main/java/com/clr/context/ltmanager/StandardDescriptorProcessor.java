@@ -2,10 +2,12 @@ package com.clr.context.ltmanager;
 
 import com.clr.context.WebAppContext;
 import com.clr.context.WebDescriptor;
+import com.clr.utils.DNode;
 import com.clr.utils.Descriptor;
 import org.dom4j.Element;
 
 import javax.swing.text.html.HTML;
+import javax.xml.soap.Node;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -21,7 +23,9 @@ public class StandardDescriptorProcessor implements DescriptorProcessor {
 
     public StandardDescriptorProcessor() {
         try {
-            tag_methods.put("listener",this.getClass().getDeclaredMethod(""));
+            tag_methods.put("listener",this.getClass().getDeclaredMethod("setListener"));
+            tag_methods.put("servlet",this.getClass().getDeclaredMethod("setServlet"));
+
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
@@ -34,8 +38,19 @@ public class StandardDescriptorProcessor implements DescriptorProcessor {
         while (iterator.hasNext()){
             Element element= (Element) iterator.next();
             String tag= element.getName();
-            Method method=
+            Method method=tag_methods.get(tag);
+
 
         }
     }
+
+    //配置context
+    public void setListener(WebAppContext context, Node node){
+
+    }
+
+    public void setServlet(WebAppContext context,Node node){
+
+    }
+
 }
