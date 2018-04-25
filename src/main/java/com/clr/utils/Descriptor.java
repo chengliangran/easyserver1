@@ -13,32 +13,20 @@ import java.io.InputStream;
  */
 
 public class Descriptor {
-    ClassLoader classLoader=Thread.currentThread().getContextClassLoader();
 
-    String xmlStr;
+    Document webXml;
 
     public Descriptor(String xmlStr){
-        this.xmlStr=xmlStr;
-    }
-
-    public Element getRootEle(){
-        Element element=null;
-        InputStream inputStream= classLoader.getResourceAsStream(xmlStr);
+        InputStream inputStream= Thread.currentThread().getContextClassLoader().getResourceAsStream(xmlStr);
         try {
-            element= new SAXReader().read(inputStream).getRootElement();
+            webXml= new SAXReader().read(inputStream);
+            System.out.println(webXml);
         } catch (DocumentException e) {
             e.printStackTrace();
         }
-        return element;
     }
 
-
-    //getter and setter
-    public String getXmlStr() {
-        return xmlStr;
-    }
-
-    public void setXmlStr(String xmlStr) {
-        this.xmlStr = xmlStr;
+    public Element getRootEle(){
+        return webXml.getRootElement();
     }
 }

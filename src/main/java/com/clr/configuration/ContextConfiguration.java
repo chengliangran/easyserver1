@@ -26,8 +26,7 @@ public class ContextConfiguration {
                 System.out.println(url);
             }
             //拿到默认的xml描述文件和 自定义的xml描述文件
-             String webXml=context.getWebXml();
-            //搜索webinfjars 和metainf的信息
+             //搜索webinfjars 和metainf的信息
             //找到web-fragment的xml 相当于子jar包的xml
         }
     };

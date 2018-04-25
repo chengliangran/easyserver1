@@ -1,19 +1,24 @@
 package com.clr.context;
 
 import com.clr.configuration.ContextConfiguration;
+import com.clr.context.handler.Handler;
 import com.clr.context.handler.SecurityHandler;
 import com.clr.context.handler.ServletHandler;
 import com.clr.context.handler.SessionHandler;
 import com.clr.lifecycle.Lifecycle;
 import com.clr.utils.PathKit;
+import org.dom4j.Document;
+import org.dom4j.DocumentException;
+import org.dom4j.io.SAXReader;
 
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
  * Created by Administrator on 2018/3/20 0020.
  */
-public class WebAppContext implements Lifecycle {
+public class WebAppContext extends Handler implements Lifecycle {
 
     String _contextPath;
 
@@ -25,9 +30,6 @@ public class WebAppContext implements Lifecycle {
     //加载器
     ClassLoader classLoader=Thread.currentThread().getContextClassLoader();
 
-    //配置文档
-    private String webXml="web.xml";
-
     //配置器
     private MetaData metadata=new MetaData();
 
@@ -37,16 +39,35 @@ public class WebAppContext implements Lifecycle {
     //欢迎网页
     private String[] welcomeFiles;
 
+    //子通路
     private SessionHandler sessionHandler =new SessionHandler();
 
     private SecurityHandler securityHandler =new SecurityHandler();
 
     private ServletHandler servletHandler =new ServletHandler();
 
+    //多线程
+    public static final ThreadLocal<WebAppContext> threadLocal=new ThreadLocal<>();
+
     //interface  --lifecycle
+
+    @Override
     public void start() {
-        contextConfiguration.configure(this);
+        threadLocal.set(this);
         metadata.resolve(this);
+//        连接通路
+        Handler handler=getSessionHandler();
+        if (this.getHandler()==null){
+            setHandler(handler);
+        }
+        handler=getSecurityHandler();
+        if (getSessionHandler().getHandler()==null){
+            getSessionHandler().setHandler(handler);
+        }
+        handler=getServletHandler();
+        if (getSecurityHandler().getHandler()==null){
+            getSecurityHandler().setHandler(handler);
+        }
 
     }
 
@@ -77,10 +98,6 @@ public class WebAppContext implements Lifecycle {
 
     public void setClassLoader(ClassLoader classLoader) {
         this.classLoader = classLoader;
-    }
-
-    public String getWebXml() {
-        return webXml;
     }
 
     public MetaData getMetadata() {
@@ -130,6 +147,9 @@ public class WebAppContext implements Lifecycle {
         context.setContextPath("/");
         context.setWebAppDir(PathKit.webContent);
         context.start();
-        System.out.println(PathKit.webContent);
+    }
+
+    public static WebAppContext getContext(){
+        return threadLocal.get();
     }
 }

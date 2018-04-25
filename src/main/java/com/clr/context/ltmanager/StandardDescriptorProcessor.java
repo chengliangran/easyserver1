@@ -2,12 +2,11 @@ package com.clr.context.ltmanager;
 
 import com.clr.context.WebAppContext;
 import com.clr.context.WebDescriptor;
-import com.clr.utils.DNode;
 import com.clr.utils.Descriptor;
 import org.dom4j.Element;
+import org.dom4j.Node;
 
 import javax.swing.text.html.HTML;
-import javax.xml.soap.Node;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -23,9 +22,9 @@ public class StandardDescriptorProcessor implements DescriptorProcessor {
 
     public StandardDescriptorProcessor() {
         try {
-            tag_methods.put("listener",this.getClass().getDeclaredMethod("setListener"));
-            tag_methods.put("servlet",this.getClass().getDeclaredMethod("setServlet"));
-
+            tag_methods.put("listener",this.getClass().getDeclaredMethod("setListener",new Class[]{WebAppContext.class, org.dom4j.Node.class}));
+            tag_methods.put("servlet",this.getClass().getDeclaredMethod("setServlet",new Class[]{WebAppContext.class, org.dom4j.Node.class}));
+            tag_methods.put("security_constraint",this.getClass().getDeclaredMethod("setSecurityConstraint",new Class[]{WebAppContext.class, org.dom4j.Node.class}));
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
         }
@@ -39,8 +38,8 @@ public class StandardDescriptorProcessor implements DescriptorProcessor {
             Element element= (Element) iterator.next();
             String tag= element.getName();
             Method method=tag_methods.get(tag);
-
-
+            System.out.println(method);
+            //第三级结束
         }
     }
 
@@ -49,7 +48,13 @@ public class StandardDescriptorProcessor implements DescriptorProcessor {
 
     }
 
-    public void setServlet(WebAppContext context,Node node){
+    //设置安全限制
+    public void setSecurityConstraint(WebAppContext context,Node node){
+
+    }
+
+    //设置servlet
+    public void setServlet(WebAppContext context, Node node){
 
     }
 

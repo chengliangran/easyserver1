@@ -2,6 +2,8 @@ package com.clr.context.handler;
 
 import com.clr.context.filter.Filter;
 import com.clr.context.servlet.SerletHolder;
+import com.clr.utils.HttpRequest;
+import com.clr.utils.HttpResponse;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,7 +15,7 @@ import java.util.jar.Attributes;
  * Created by Administrator on 2018/4/19 0019.
  */
 
-public class ServletHandler {
+public class ServletHandler extends Handler{
 
     //servl 容器
     Map<String,SerletHolder> holderMap=new HashMap<>();
@@ -23,6 +25,23 @@ public class ServletHandler {
 
     //filter
     List<Filter> filters=new ArrayList<>();
+
+    //override
+
+    @Override
+    public void handle(HttpRequest request, HttpResponse response) {
+        super.handle(request, response);
+    }
+
+    @Override
+    public void start() {
+        super.start();
+    }
+
+    @Override
+    public void stop() {
+        super.stop();
+    }
 
     //getter and setter
     public SerletHolder getHolder(String servletName) {

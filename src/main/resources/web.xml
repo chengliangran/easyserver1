@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <root>
-    <servlet></servlet>
+    <servlet>
 
+    </servlet>
+    <listener>
 
+    </listener>
+    <security_constraint>
+
+    </security_constraint>
 </root>
