@@ -8,6 +8,13 @@ public class Session {
 
     long accessed=0;
 
+    boolean expired=false;
+
+    //expired
+    public void expired(boolean expired){
+        this.expired=expired;
+    }
+
     //getter and setter
     public long getAccessed() {
         return accessed;

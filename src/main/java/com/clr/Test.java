@@ -26,21 +26,6 @@ import java.util.Map;
  */
 public class Test {
     public static void main(String[] args) {
-        URLClassLoader classLoader= (URLClassLoader) Thread.currentThread().getContextClassLoader();
-        URL[] urls= classLoader.getURLs();
-        InputStream stream=classLoader.getResourceAsStream("web.xml");
-        byte[] buffer=new byte[2048];
-        Document document;
-        try {
-               document=new SAXReader().read(stream);
-               Element element= document.getRootElement();
-               Iterator<Element> iterator= element.elementIterator();
-                while (iterator.hasNext()){
-                    System.out.println(iterator.next().getName());
-                }
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        }
-
+        System.out.println(PathKit.webContent+"/../..");
     }
 }
