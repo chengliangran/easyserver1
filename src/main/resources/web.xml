@@ -1,12 +1,65 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<root>
+<web-app
+        xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+        metadata-complete="true"
+        version="2.5"
+>
+
+    <description></description>
+
+    <context-param>
+        <param-name></param-name>
+        <param-value></param-value>
+    </context-param>
+
+    <welcome-file-list>
+        <welcome-file></welcome-file>
+    </welcome-file-list>
+
+    <mime-mapping>
+        <extension></extension>
+        <mime-type></mime-type>
+    </mime-mapping>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name></web-resource-name>
+            <url-pattern></url-pattern>
+        </web-resource-collection>
+    </security-constraint>
+
     <servlet>
-
+        <servlet-name></servlet-name>
+        <init-param>
+            <param-name></param-name>
+            <param-value></param-value>
+        </init-param>
+        <security-role-ref>
+            <role-name></role-name>
+        </security-role-ref>
+        <servlet-class></servlet-class>
+        <jsp-file></jsp-file>
     </servlet>
-    <listener>
 
-    </listener>
-    <security_constraint>
+    <servlet-mapping>
+        <servlet-name></servlet-name>
+        <url-pattern></url-pattern>
+    </servlet-mapping>
 
-    </security_constraint>
-</root>
+    <filter>
+        <filter-name></filter-name>
+        <filter-class></filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name></filter-name>
+        <servlet-name></servlet-name>
+
+    </filter-mapping>
+    <session-config>
+        <session-timeout></session-timeout>
+    </session-config>
+
+</web-app>
