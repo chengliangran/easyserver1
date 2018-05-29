@@ -2,39 +2,44 @@ package com.easyserver.core;
 
 import com.easyserver.connector.EasyConnector;
 import com.easyserver.handler.Handler;
-import com.easyserver.lifecycle.Lifecycle;
-import com.easyserver.lifecycle.LifecycleImp;
-import com.easyserver.thread.ThreadPool;
+import com.easyserver.lifecycle.LifeCycleImpl;
+import com.easyserver.multthread.ThreadPool;
+
+import java.sql.Connection;
 
 /**
- * Created by Administrator on 2018/5/9 0009.
+ * Created by Administrator on 2018/5/29 0029.
  */
 
-public class Server extends LifecycleImp{
+public class Server extends LifeCycleImpl {
 
-    EasyConnector easyConnector;
+    EasyConnector connector;
 
     ThreadPool threadPool;
 
     Handler handler;
-
-    public Server() {
-    }
+    
+    Object lock=new Object();
 
     @Override
-    public void doStart() {
-        super.doStart();
+    public void start() {
         threadPool=new ThreadPool();
+
         handler.start();
+        threadPool.start();
+        connector.start();
+        
     }
+
+
 
     //getter and setter
-    public EasyConnector getEasyConnector() {
-        return easyConnector;
+    public EasyConnector getConnector() {
+        return connector;
     }
 
-    public void setEasyConnector(EasyConnector easyConnector) {
-        this.easyConnector = easyConnector;
+    public void setConnector(EasyConnector connector) {
+        this.connector = connector;
     }
 
     public ThreadPool getThreadPool() {
